@@ -11,7 +11,30 @@ HELP_MESSAGE = """
 <b>/help</b> - <em>список команд</em>
 <b>/start</b> - <em>старт бота</em>
 <b>/buy</b> - <em>купить  </em>
+<b>/add</b> - <em>добавить </em>
 """
+
+@dp.message_handler(commands = ['add'])
+async def send_buy_command(message: types.Message):
+
+    args = message.get_args()
+    if message.chat.id != 2016116717:
+        return await bot.send_message(message.chat.id, f"!SORRY, ВЫ НЕ МОЖЕТЕ ДОБАВИТЬ РЫБОВ, В СВЯЗИ С ТЕМ, ЧТО НЕ ЯВЛЯЕТЕСЬ ВЛАДЕЛЬЦЕМ МАГАЗИНА!")
+    if not args:
+            return await bot.send_message(message.chat.id, f"Сейчас есть {len(ribov_list)} рыбов в наличии. Сколько рыбов вы хотите?")
+    else:
+        if args.isdigit():
+            args = int(args)
+            for i in range(args):
+                #print(i)
+                ribov_list.append(i)
+            return await bot.send_message(message.chat.id, f"Осталось {len(ribov_list)} рыбов в наличии.")
+        else:
+            return await bot.send_message(message.chat.id, "Ой кажется что-то пошло не так, попробуйте снова")
+
+
+
+
 
 
 
@@ -35,18 +58,18 @@ async def send_buy_command(message: types.Message):
         return await bot.send_message(message.chat.id, "Мы сожалеем, но рыбов не осталось, приходите по позже")
     if not args:
             return await bot.send_message(message.chat.id, f"Сейчас есть {len(ribov_list)} рыбов в наличии. Сколько рыбов вы хотите?")
-        else:
-            if args.isdigit():
-                args = int(args)
-                if args > len(ribov_list):
-                    return await bot.send_message(message.chat.id, "Мы сожалеем, но рыбов не хватит попробуйте ввести число поменьше")
-                else:
-                    for i in range(args):
-                        #print(i)
-                        ribov_list.pop()
-                    return await bot.send_message(message.chat.id, f"Осталось {len(ribov_list)} рыбов в наличии.")
+    else:
+        if args.isdigit():
+            args = int(args)
+            if args > len(ribov_list):
+                return await bot.send_message(message.chat.id, "Мы сожалеем, но рыбов не хватит попробуйте ввести число поменьше")
             else:
-                return await bot.send_message(message.chat.id, "Ой кажется что-то пошло не так, попробуйте снова")
+                for i in range(args):
+                    #print(i)
+                    ribov_list.pop()
+                return await bot.send_message(message.chat.id, f"Осталось {len(ribov_list)} рыбов в наличии.")
+        else:
+            return await bot.send_message(message.chat.id, "Ой кажется что-то пошло не так, попробуйте снова")
 
 
 
